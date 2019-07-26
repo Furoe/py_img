@@ -28,7 +28,7 @@ def skyRegion(picname):
 
 	pic_name = picname.split('/')[-1].split('.')[0]
 	tmp = 'D:/temp/py_img/' + pic_name + '-mask.jpg'
-	print(tmp)
+	#print(tmp)
 	cv.imwrite(tmp,imgThresholded)
 	return tmp
 
@@ -43,18 +43,16 @@ def seamClone(skyname,picname,maskname):
 	cnt = contours[0]
 
 	x,y,w,h = cv.boundingRect(cnt)
-	#print (x,y,w,h) 
+	print (x,y,w,h) 
 	if w==0 or h == 0:
 		return dst
-	dst_x = len(dst[0])
-	dst_y = len(dst[1])
-	src_x = len(src[0])
-	src_y = len(src[1]) 
-	scale_x = w*1.0/src_x 
-	src = cv.resize(src,(dst_x,dst_y),interpolation = cv.INTER_CUBIC)
+	#scale_x = w*1.0/src_x 
+	#print(scale_x)
+	src = cv.resize(src,(dst.shape[1],dst.shape[0]),interpolation = cv.INTER_CUBIC)
 
 	cv.imwrite('src_sky.jpg',src)
-	center = (int((x+w)/2),int((y+h)/2))
+	#center = (int((x+w)/2),int((y+h)/2))
+	center = (720,268)
 	print (center)
 
 	output = cv.seamlessClone(src,dst,src_mask0,center,cv.NORMAL_CLONE)
@@ -74,6 +72,5 @@ if __name__ == "__main__":
 	picname = 'C:/Users/hss/Desktop/20190723162440.jpg'
 	skyname = 'C:/Users/hss/Desktop/20190723162643.jpg'
 	maskname = skyRegion(picname)
-	print(maskname)
 	output = seamClone(skyname,picname,maskname)
 	cv.imwrite('output.jpg',output)
